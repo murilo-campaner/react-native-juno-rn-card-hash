@@ -1,0 +1,22 @@
+{
+  "name": "react-native-juno-rn-card-hash-example",
+  "displayName": "JunoRnCardHash Example",
+  "expo": {
+    "name": "react-native-juno-rn-card-hash-example",
+    "slug": "react-native-juno-rn-card-hash-example",
+    "description": "Example app for react-native-juno-rn-card-hash",
+    "privacy": "public",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
