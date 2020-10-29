@@ -13,21 +13,21 @@ npm install react-native-juno-rn-card-hash
 ```js
 import JunoCardHash from 'react-native-juno-rn-card-hash';
 
-  // ...
+// ...
 
-  // Credit Card Data to be hashed
-  const cardData = {
-    cardNumber: '5207156147520886',
-    holderName: 'Foo bar',
-    securityCode: '265',
-    expirationMonth: '11',
-    expirationYear: '2021',
-  };
+// Credit Card Data to be hashed
+const cardData = {
+  cardNumber: '5207156147520886',
+  holderName: 'Foo bar',
+  securityCode: '265',
+  expirationMonth: '11',
+  expirationYear: '2021',
+};
 
-  // Generate Card Hash
-  Juno.getCardHash(cardData)
-    .then(console.log)
-    .catch(console.error);
+// Generate Card Hash
+Juno.getCardHash(cardData)
+  .then(console.log)
+  .catch(console.error);
 ```
 
 ## Contributing
