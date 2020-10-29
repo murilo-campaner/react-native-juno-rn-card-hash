@@ -1,17 +1,61 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import JunoRnCardHash from 'react-native-juno-rn-card-hash';
+import { StyleSheet, View, Text, Button, Clipboard } from 'react-native';
+import JunoCardHash from 'react-native-juno-rn-card-hash';
+
+/**
+ * ~ EXPO ONLY ~
+ * This package is necessary to generate hash random bytes
+ * https://docs.expo.io/versions/latest/sdk/random/
+ */
+import 'expo-random';
+
+/**
+ * Create JunoCardHash Instace
+ * @string publicToken
+ * @string environment (sandbox|production)
+ */
+const Juno = new JunoCardHash('<PUBLIC_JUNO_TOKEN>', 'production');
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [hash, setHash] = React.useState<string | undefined>('123');
+  const [error, setError] = React.useState<string | undefined>();
 
   React.useEffect(() => {
-    JunoRnCardHash.multiply(3, 7).then(setResult);
+    // Credit Card Data to be hashed
+    const cardData = {
+      cardNumber: '5207156147520886',
+      holderName: 'Foo bar',
+      securityCode: '265',
+      expirationMonth: '11',
+      expirationYear: '2021',
+    };
+
+    // Generate Card Hash
+    Juno.getCardHash(cardData)
+      .then(setHash)
+      .catch(({ message }) => setError(message));
+  }, []);
+
+  const handleCopy = React.useCallback((string?: string) => {
+    if (!string) return;
+    Clipboard.setString(string);
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      {!error ? (
+        <>
+          <Text style={styles.text}>
+            Card Hash: {`\n\n`} {hash}
+          </Text>
+          <Button title="Copy" onPress={() => handleCopy(hash)} />
+        </>
+      ) : (
+        <Text style={styles.text}>
+          An error ocurred: {'\n\n'}
+          {error}
+        </Text>
+      )}
     </View>
   );
 }
@@ -21,5 +65,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    textAlign: 'center',
   },
 });
