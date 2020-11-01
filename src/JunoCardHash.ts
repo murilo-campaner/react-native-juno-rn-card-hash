@@ -4,7 +4,6 @@ import * as qs from 'qs';
 import axios, { AxiosInstance } from 'axios'; // @ts-ignore
 import { TextEncoder } from 'text-encoding-polyfill'; // @ts-ignore
 import { KEYUTIL } from 'jsrsasign';
-import 'hex-lite';
 
 const ENVIRONMENT = {
   SANDBOX: 'sandbox',

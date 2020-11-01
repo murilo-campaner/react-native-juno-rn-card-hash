@@ -64,7 +64,6 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "expo-random": "^9.0.1",
     "react": "*",
     "react-native": "*"
   },
@@ -144,7 +143,6 @@
   "dependencies": {
     "@types/qs": "^6.9.5",
     "axios": "^0.21.0",
-    "hex-lite": "^1.5.0",
     "isomorphic-webcrypto": "^2.3.6",
     "jsrsasign": "^10.0.4",
     "qs": "^6.9.4",
