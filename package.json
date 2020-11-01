@@ -146,7 +146,7 @@
     "axios": "^0.21.0",
     "hex-lite": "^1.5.0",
     "isomorphic-webcrypto": "^2.3.6",
-    "json-web-key": "https://github.com/murilo-campaner/node-json-web-key.git",
+    "jsrsasign": "^10.0.4",
     "qs": "^6.9.4",
     "text-encoding-polyfill": "^0.6.7"
   }

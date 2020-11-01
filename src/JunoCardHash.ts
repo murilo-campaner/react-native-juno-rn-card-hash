@@ -3,7 +3,7 @@ import crypto from 'isomorphic-webcrypto';
 import * as qs from 'qs';
 import axios, { AxiosInstance } from 'axios'; // @ts-ignore
 import { TextEncoder } from 'text-encoding-polyfill'; // @ts-ignore
-import JSONWebKey from 'json-web-key';
+import { KEYUTIL } from 'jsrsasign';
 import 'hex-lite';
 
 const ENVIRONMENT = {
@@ -40,8 +40,9 @@ class JunoCardHash {
 
   async getCardHash(cardData: iCardData) {
     const publicKey = await this._fetchPublicKey();
-    const jwkJey = JSONWebKey.fromPEM(publicKey);
-    const encriptedPublicKey = await this._importKey(jwkJey.toJSON());
+    const key = KEYUTIL.getKey(publicKey);
+    const jwkKey = KEYUTIL.getJWKFromKey(key);
+    const encriptedPublicKey = await this._importKey(jwkKey);
     const cardBuffer = this._str2ab(JSON.stringify(cardData));
 
     const encryptedCard = await this._encryptCardData(
@@ -64,11 +65,11 @@ class JunoCardHash {
     try {
       let { data } = await this.axios.post(ENDPOINT);
       return `-----BEGIN PUBLIC KEY-----
-      ${data}
-      -----END PUBLIC KEY-----`.replace(/(\r\n|\n|\r)/gm, '');
+${data}
+-----END PUBLIC KEY-----`;
     } catch (error) {
       throw new Error(
-        error.response.message ||
+        error?.response?.message ||
           'Erro ao gerar a chave pública na API de pagamentos'
       );
     }
@@ -85,15 +86,9 @@ class JunoCardHash {
 
   _importKey(binaryKey: string): Promise<any> {
     const algorithm = JunoCardHash.getAlgorithm();
-
-    return new Promise((resolve, reject) =>
-      crypto.ensureSecure().then(() =>
-        // @ts-ignore
-        crypto.subtle
-          .importKey('spki', binaryKey, algorithm, false, ['encrypt'])
-          .then(resolve)
-          .catch(reject)
-      )
+    return crypto.ensureSecure().then(() =>
+      // @ts-ignore
+      crypto.subtle.importKey('spki', binaryKey, algorithm, false, ['encrypt'])
     );
   }
 
