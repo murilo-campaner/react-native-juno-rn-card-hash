@@ -3,13 +3,6 @@ import { StyleSheet, View, Text, Button, Clipboard } from 'react-native';
 import JunoCardHash from 'react-native-juno-rn-card-hash';
 
 /**
- * ~ EXPO ONLY ~
- * This package is necessary to generate hash random bytes
- * https://docs.expo.io/versions/latest/sdk/random/
- */
-import 'expo-random';
-
-/**
  * Create JunoCardHash Instace
  * @string publicToken
  * @string environment (sandbox|production)
