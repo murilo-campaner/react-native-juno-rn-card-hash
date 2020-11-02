@@ -2,7 +2,8 @@
 import crypto from 'isomorphic-webcrypto';
 import * as qs from 'qs';
 import axios, { AxiosInstance } from 'axios';
-// @ts-ignore
+
+// @ts-ignore-start
 import { KEYUTIL } from 'jsrsasign';
 // @ts-ignore
 import { TextEncoder } from 'text-encoding';
@@ -191,73 +192,3 @@ ${data}
 }
 
 export default JunoCardHash;
-
-// class TextEncoder {
-//   encoding: string;
-
-//   constructor() {
-//     this.encoding = 'utf-8';
-//   }
-
-//   encode = (e: any) => {
-//     for (
-//       var f = e.length,
-//         b = -1,
-//         a =
-//           typeof Uint8Array === 'undefined'
-//             ? Array(1.5 * f)
-//             : new Uint8Array(3 * f),
-//         c,
-//         g,
-//         d = 0;
-//       d !== f;
-
-//     ) {
-//       c = e.charCodeAt(d);
-//       d += 1;
-//       if (c >= 55296 && c <= 56319) {
-//         if (d === f) {
-//           a[(b += 1)] = 239;
-//           a[(b += 1)] = 191;
-//           a[(b += 1)] = 189;
-//           break;
-//         }
-//         g = e.charCodeAt(d);
-//         if (g >= 56320 && g <= 57343) {
-//           if (
-//             ((c = 1024 * (c - 55296) + g - 56320 + 65536), (d += 1), c > 65535)
-//           ) {
-//             a[(b += 1)] = 240 | (c >>> 18);
-//             a[(b += 1)] = 128 | ((c >>> 12) & 63);
-//             a[(b += 1)] = 128 | ((c >>> 6) & 63);
-//             a[(b += 1)] = 128 | (c & 63);
-//             continue;
-//           }
-//         } else {
-//           a[(b += 1)] = 239;
-//           a[(b += 1)] = 191;
-//           a[(b += 1)] = 189;
-//           continue;
-//         }
-//       }
-//       c <= 127
-//         ? (a[(b += 1)] = 0 | c)
-//         : (c <= 2047
-//             ? (a[(b += 1)] = 192 | (c >>> 6))
-//             : ((a[(b += 1)] = 224 | (c >>> 12)),
-//               (a[(b += 1)] = 128 | ((c >>> 6) & 63))),
-//           (a[(b += 1)] = 128 | (c & 63)));
-//     }
-//     if (typeof Uint8Array !== 'undefined') {
-//       // @ts-ignore
-//       return a.subarray(0, b + 1);
-//     }
-//     // @ts-ignore
-//     a.length = b + 1;
-//     return a;
-//   };
-
-//   toString = () => {
-//     return '[object TextEncoder]';
-//   };
-// }
