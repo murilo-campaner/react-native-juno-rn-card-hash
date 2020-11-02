@@ -2,7 +2,7 @@
 import crypto from 'isomorphic-webcrypto';
 import * as qs from 'qs';
 import axios, { AxiosInstance } from 'axios'; // @ts-ignore
-import { TextEncoder } from 'text-encoding-polyfill'; // @ts-ignore
+import { TextEncoder } from 'text-encoding'; // @ts-ignore
 import { KEYUTIL } from 'jsrsasign';
 
 const ENVIRONMENT = {

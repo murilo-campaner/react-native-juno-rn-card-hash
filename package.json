@@ -146,6 +146,6 @@
     "isomorphic-webcrypto": "^2.3.6",
     "jsrsasign": "^10.0.4",
     "qs": "^6.9.4",
-    "text-encoding-polyfill": "^0.6.7"
+    "text-encoding": "^0.7.0"
   }
 }
