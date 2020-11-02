@@ -11,6 +11,9 @@ npm install react-native-juno-rn-card-hash
 ## Usage
 
 ```js
+/** Necessary to encode ArrayBuffer (TextEncoder.encode()) */
+import '@expo/browser-polyfill';
+
 import JunoCardHash from 'react-native-juno-rn-card-hash';
 
 // ...

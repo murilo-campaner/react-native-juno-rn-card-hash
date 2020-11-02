@@ -64,6 +64,7 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
+    "@expo/browser-polyfill": "*",
     "react": "*",
     "react-native": "*"
   },
