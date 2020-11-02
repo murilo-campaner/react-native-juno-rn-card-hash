@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, Button, Clipboard } from 'react-native';
-import JunoCardHash from 'react-native-juno-rn-card-hash';
 
 /** Necessary to encode ArrayBuffer */
 import '@expo/browser-polyfill';
+
+import JunoCardHash from 'react-native-juno-rn-card-hash';
 
 /**
  * Create JunoCardHash Instace
