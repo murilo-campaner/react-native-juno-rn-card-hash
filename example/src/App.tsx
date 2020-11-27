@@ -11,11 +11,14 @@ import JunoCardHash from 'react-native-juno-rn-card-hash';
  * @string publicToken
  * @string environment (sandbox|production)
  */
-const Juno = new JunoCardHash('<JUNO_PUBLIC_TOKEN>', 'sandbox');
+const Juno = new JunoCardHash(
+  '74942A9C8B05F538EE9A389459CBFD285C578F73A65B7476D1E818A8D9F14E91',
+  'sandbox'
+);
 
 export default function App() {
   const [hash, setHash] = React.useState<string | undefined>('');
-  const [error, setError] = React.useState<string | undefined>();
+  const [error, setError] = React.useState<any | undefined>();
 
   React.useEffect(() => {
     // Credit Card Data to be hashed
@@ -30,7 +33,7 @@ export default function App() {
     // Generate Card Hash
     Juno.getCardHash(cardData)
       .then(setHash)
-      .catch(({ message }) => setError(message));
+      .catch((e) => setError(e));
   }, []);
 
   const handleCopy = React.useCallback((string?: string) => {
@@ -50,7 +53,9 @@ export default function App() {
       ) : (
         <Text style={styles.text}>
           An error ocurred: {'\n\n'}
-          {error}
+          {error.message}
+          {'\n\n'}
+          {JSON.stringify(error.details)}
         </Text>
       )}
     </View>

@@ -41,28 +41,24 @@ class JunoCardHash {
   }
 
   async getCardHash(cardData: iCardData) {
-    const publicKey = await this._fetchPublicKey();
-    const key = KEYUTIL.getKey(publicKey);
-    const jwkKey = KEYUTIL.getJWKFromKey(key);
-    const encriptedPublicKey = await this._importKey(jwkKey);
-    const cardBuffer = this._str2ab(JSON.stringify(cardData));
-
+    let encryptedData;
     try {
-      const encryptedCard = await this._encryptCardData(
+      const publicKey = await this._fetchPublicKey();
+      const key = KEYUTIL.getKey(publicKey);
+      const jwkKey = KEYUTIL.getJWKFromKey(key);
+      const encriptedPublicKey = await this._importKey(jwkKey);
+      const cardBuffer = this._str2ab(JSON.stringify(cardData));
+
+      encryptedData = await this._encryptCardData(
         encriptedPublicKey,
         cardBuffer
       );
 
-      const result = await this._fetchCardHash(encryptedCard);
+      const hash = await this._fetchCardHash(encryptedData);
 
-      if (!result.data) {
-        throw new Error('Não foi possível gerar o hash do cartão');
-      }
-
-      return result.data;
-    } catch (e) {
-      console.error(e);
-      throw new Error('Não foi possível gerar o hash do cartão');
+      return hash;
+    } catch (error) {
+      throw new JunoCardHashError(error.message, error.details);
     }
   }
 
@@ -75,7 +71,7 @@ class JunoCardHash {
 ${data}
 -----END PUBLIC KEY-----`;
     } catch (error) {
-      throw new Error(
+      throw new JunoCardHashError(
         error?.response?.message ||
           'Erro ao gerar a chave pública na API de pagamentos'
       );
@@ -88,7 +84,16 @@ ${data}
       encryptedData: encryptedCard,
     });
     const ENDPOINT = `/get-credit-card-hash.json?${params}`;
-    return this.axios.post(ENDPOINT);
+    return this.axios.post(ENDPOINT).then((result: any) => {
+      if (result.success && result.data) {
+        return result.data;
+      } else {
+        throw new JunoCardHashError('Não foi possível gerar o hash do cartão', {
+          ...result,
+          requestParams: params,
+        });
+      }
+    });
   }
 
   _importKey(binaryKey: string): Promise<any> {
@@ -104,12 +109,20 @@ ${data}
     encodedCardData: ArrayBuffer
   ): Promise<string | void> {
     const algorithm = JunoCardHash.getAlgorithm();
-    return crypto.ensureSecure().then(() => {
-      // @ts-ignore
-      return crypto.subtle
-        .encrypt(algorithm, publicKey, encodedCardData)
-        .then((data: ArrayBuffer) => this._encodeAb(data));
-    });
+    return crypto
+      .ensureSecure()
+      .then(() => {
+        // @ts-ignore
+        return crypto.subtle
+          .encrypt(algorithm, publicKey, encodedCardData)
+          .then((data: ArrayBuffer) => this._encodeAb(data));
+      })
+      .catch((error) => {
+        throw new JunoCardHashError(
+          `Não foi possível criptografar o cartão: ${error.message}`,
+          error
+        );
+      });
   }
 
   _str2ab(str: string): ArrayBuffer {
@@ -188,6 +201,15 @@ ${data}
     instance.interceptors.response.use(({ data }) => data);
 
     return instance;
+  }
+}
+
+class JunoCardHashError extends Error {
+  details: any;
+  constructor(message: string, details?: any) {
+    super(message);
+    this.name = 'JunoCardHashError';
+    this.details = details;
   }
 }
 
