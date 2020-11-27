@@ -11,10 +11,7 @@ import JunoCardHash from 'react-native-juno-rn-card-hash';
  * @string publicToken
  * @string environment (sandbox|production)
  */
-const Juno = new JunoCardHash(
-  '74942A9C8B05F538EE9A389459CBFD285C578F73A65B7476D1E818A8D9F14E91',
-  'sandbox'
-);
+const Juno = new JunoCardHash('<JUNO_PUBLIC_TOKEN>', 'sandbox');
 
 export default function App() {
   const [hash, setHash] = React.useState<string | undefined>('');
